@@ -46,16 +46,6 @@ public class AuthorizationTestSuite {
 	@Test
 	public void RegisterExistingUser() throws Exception {
 		fail("Not implemented yet!");
-		driver.findElement(By.xpath("//div[@id='app']/div/button[2]")).click();
-		driver.findElement(By.xpath("//input[@type='text']")).click();
-		driver.findElement(By.xpath("//input[@type='text']")).clear();
-		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("test");
-		driver.findElement(By.xpath("//input[@type='password']")).clear();
-		driver.findElement(By.xpath("//input[@type='password']")).sendKeys("test");
-		driver.findElement(By.xpath("//button[@type='submit']")).click();
-		driver.findElement(By.xpath("//div[@id='app']/div/div")).click();
-		assertEquals("Błąd przy zakładaniu konta. Kod odpowiedzi: 409",
-		driver.findElement(By.xpath("//div[@id='app']/div/div")).getText());
 	}
 
 	@After
