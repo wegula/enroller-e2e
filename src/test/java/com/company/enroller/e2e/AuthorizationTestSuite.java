@@ -24,7 +24,7 @@ public class AuthorizationTestSuite {
 		System.setProperty("webdriver.chrome.driver", "lib/chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.get("http://localhost:8088/");
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
 	}
 
@@ -32,20 +32,62 @@ public class AuthorizationTestSuite {
 	public void SmokeTest() throws Exception {
 		 assertEquals("System do zapisów na zajęcia", driver.findElement(By.xpath("//div[@id='app']/h1")).getText());
 	}
-	
+
+
 	@Test
-	public void LoginInAndOut() throws Exception {
-		fail("Not implemented yet!");
+	public void testLoginLogout() throws Exception {
+		driver.get("http://localhost:8088/");
+		assertEquals("System do zapisów na zajęcia", driver.findElement(By.xpath("//div[@id='app']/h1")).getText());
+		driver.findElement(By.xpath("//input[@type='text']")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).clear();
+		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("user");
+		driver.findElement(By.xpath("//input[@type='password']")).clear();
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys("user");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.linkText("WYLOGUJ")).click();
+		assertEquals("System do zapisów na zajęcia", driver.findElement(By.xpath("//div[@id='app']/h1")).getText());
 	}
 
 	@Test
-	public void RegisterNewUser() throws Exception {
-		fail("Not implemented yet!");
+	public void testRegisteringExistingUser() throws Exception {
+		driver.get("http://localhost:8088/");
+		driver.findElement(By.xpath("//div[@id='app']/div/button[2]")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).clear();
+		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("user");
+		driver.findElement(By.xpath("//input[@type='password']")).clear();
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys("user");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("Błąd przy zakładaniu konta. Kod odpowiedzi: 409", driver.findElement(By.xpath("//div[@id='app']/div/div")).getText());
 	}
 
 	@Test
-	public void RegisterExistingUser() throws Exception {
-		fail("Not implemented yet!");
+	public void testLoginUnregisteredUsed() throws Exception {
+		driver.get("http://localhost:8088/");
+		driver.findElement(By.xpath("//input[@type='text']")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).clear();
+		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("user1");
+		driver.findElement(By.xpath("//input[@type='password']")).clear();
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys("user1");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		assertEquals("Logowanie nieudane.", driver.findElement(By.xpath("//div[@id='app']/div/div")).getText());
+	}
+
+	@Test
+	public void testLoginCreateMeetingLogout() throws Exception {
+		driver.get("http://localhost:8088/");
+		driver.findElement(By.xpath("//input[@type='text']")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).clear();
+		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("user");
+		driver.findElement(By.xpath("//input[@type='password']")).clear();
+		driver.findElement(By.xpath("//input[@type='password']")).sendKeys("user");
+		driver.findElement(By.xpath("//button[@type='submit']")).click();
+		driver.findElement(By.xpath("//div[@id='app']/div/div/div/button")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).click();
+		driver.findElement(By.xpath("//input[@type='text']")).clear();
+		driver.findElement(By.xpath("//input[@type='text']")).sendKeys("spotkanie");
+		driver.findElement(By.xpath("//div[@id='app']/div/div/div/form/button")).click();
+		driver.findElement(By.linkText("WYLOGUJ")).click();
 	}
 
 	@After
